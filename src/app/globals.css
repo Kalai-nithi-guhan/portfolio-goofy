@@ -16,6 +16,8 @@
   --os-text: #F3F4F6;
   --os-text-muted: #9CA3AF;
   --os-text-dim: #6B7280;
+  /* Mobile nav height for padding calculations */
+  --mobile-nav-h: 56px;
 }
 
 [data-theme="light"] {
@@ -37,14 +39,77 @@
 }
 
 html {
+  font-size: 16px;
   scroll-behavior: smooth;
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   color-scheme: dark;
+  /* Prevent horizontal overflow at all widths */
+  overflow-x: clip;
+}
+
+@media (min-width: 1536px) {
+  html {
+    font-size: 17px;
+  }
 }
 
 html[data-theme="light"] {
   color-scheme: light;
 }
+
+/* Shared layout container: w-full mx-auto px-4 sm:px-6 lg:px-10, max-w 1200px at lg, 1320px at xl, 1480px at 2xl */
+.os-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .os-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .os-container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    max-width: 1200px;
+  }
+}
+@media (min-width: 1280px) {
+  .os-container {
+    max-width: 1320px;
+  }
+}
+@media (min-width: 1536px) {
+  .os-container {
+    max-width: 1480px;
+  }
+}
+
+/* Fluid Typography Scale */
+.hero-name-fluid {
+  font-size: clamp(2.35rem, 5.8vw, 5.75rem); /* up to ~92px at xl */
+  line-height: 1.05;
+}
+
+.section-heading-fluid {
+  font-size: clamp(1.75rem, 3.8vw, 3.75rem); /* up to ~60px at xl */
+  line-height: 1.15;
+}
+
+.mono-caption-fluid {
+  font-size: clamp(0.75rem, 1vw, 0.875rem); /* 12px mobile to 14px desktop */
+  letter-spacing: 0.06em;
+}
+
+.body-fluid {
+  font-size: clamp(1rem, 1.15vw, 1.125rem); /* 16px mobile to 18px at xl */
+  line-height: 1.65;
+}
+
 
 body {
   background-color: var(--os-bg);
@@ -55,7 +120,25 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-bottom: env(safe-area-inset-bottom);
+  /* On mobile: pad bottom so content isn't hidden behind fixed nav (56px) + safe area + 72px extra */
+  padding-bottom: calc(var(--mobile-nav-h) + max(8px, env(safe-area-inset-bottom)) + 72px);
+}
+
+/* On md+ screens, remove the mobile nav padding */
+@media (min-width: 768px) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* Global min-w-0 on flex/grid children that hold text */
+* {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+img, video, canvas, svg {
+  max-width: 100%;
 }
 
 /* Headings font */
@@ -90,6 +173,20 @@ code, pre, .font-mono, .badge-mono {
   background: #7CFF6B;
 }
 
+/* Skills tier tab row: hide webkit scrollbar so no grey track appears */
+.skills-tabs-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbars on no-scrollbar utility */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* CRT Scanline overlay (lightweight CSS pseudo) */
 .scanline-grid {
   background-size: 32px 32px;
@@ -105,6 +202,20 @@ code, pre, .font-mono, .badge-mono {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Scroll margin for all section anchors so sticky header doesn't cover them */
+section[id],
+[id="about"],
+[id="skills"],
+[id="projects"],
+[id="case-files"],
+[id="experience"],
+[id="education"],
+[id="terminal"],
+[id="bug-squash"],
+[id="contact"] {
+  scroll-margin-top: 72px;
 }
 
 @keyframes marquee {
@@ -133,9 +244,29 @@ code, pre, .font-mono, .badge-mono {
   animation: drawDoodle 1.2s ease-out forwards;
 }
 
-/* Fly-swatter custom cursor for Bug Squash arena */
-.cursor-swatter {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23FF5CAA' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='6' y='2' width='12' height='12' rx='2' fill='%23FF5CAA22'/%3E%3Cline x1='6' y1='6' x2='18' y2='6'/%3E%3Cline x1='6' y1='10' x2='18' y2='10'/%3E%3Cline x1='10' y1='2' x2='10' y2='14'/%3E%3Cline x1='14' y1='2' x2='14' y2='14'/%3E%3Cline x1='12' y1='14' x2='12' y2='22' stroke-width='3' stroke='%237CFF6B'/%3E%3C/svg%3E") 16 4, crosshair;
+/* Fly-swatter custom cursor for Bug Squash arena - desktop fine pointer only */
+@media (hover: hover) and (pointer: fine) {
+  .cursor-swatter {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23FF5CAA' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='6' y='2' width='12' height='12' rx='2' fill='%23FF5CAA22'/%3E%3Cline x1='6' y1='6' x2='18' y2='6'/%3E%3Cline x1='6' y1='10' x2='18' y2='10'/%3E%3Cline x1='10' y1='2' x2='10' y2='14'/%3E%3Cline x1='14' y1='2' x2='14' y2='14'/%3E%3Cline x1='12' y1='14' x2='12' y2='22' stroke-width='3' stroke='%237CFF6B'/%3E%3C/svg%3E") 16 4, crosshair;
+  }
+}
+
+/* Milestone toast fade animation */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(-6px); }
+  15% { opacity: 1; transform: translateY(0); }
+  75% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-6px); }
+}
+
+/* Wide mono uppercase text: tighter tracking only on mobile below md */
+@media (max-width: 767px) {
+  .tracking-wider {
+    letter-spacing: 0.06em;
+  }
+  .tracking-widest {
+    letter-spacing: 0.08em;
+  }
 }
 
 /* Respect reduced motion */
@@ -148,3 +279,8 @@ code, pre, .font-mono, .badge-mono {
   }
 }
 
+/* Focus ring visible for keyboard nav */
+:focus-visible {
+  outline: 2px solid var(--os-accent);
+  outline-offset: 2px;
+}

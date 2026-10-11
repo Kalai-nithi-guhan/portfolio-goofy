@@ -37,6 +37,13 @@ const SKILL_JOKES: Record<string, string> = {
   "VS Code": "100+ extensions installed, uses 4GB RAM to edit a text file.",
 };
 
+// Short labels used for the tab buttons
+const TIER_SHORT_LABELS: Record<string, string> = {
+  "Main Equipment": "Main",
+  "Comfortable Loadout": "Comfortable",
+  "Skill Tree / Exploring": "Learning",
+};
+
 export function SkillsSection() {
   const [activeTierIndex, setActiveTierIndex] = useState(0);
 
@@ -55,52 +62,76 @@ export function SkillsSection() {
     }
   };
 
+  const tierLabel = (idx: number) =>
+    idx === 0 ? "Main" : idx === 1 ? "Comfortable" : "Learning";
+
   return (
-    <section id="skills" className="py-16 sm:py-20 scroll-mt-14 relative">
+    <section id="skills" className="py-16 md:py-24 lg:py-32 scroll-mt-[72px] relative">
       <SectionIdCard
         theme="skills"
         roleTitle="Loadout Master"
         sectionName="Skills"
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="os-container">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] flex items-center justify-center text-[var(--os-accent)]">
-              <Shield className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="text-xs font-mono text-[var(--os-accent)] tracking-wider">
-                02 // CHARACTER ARSENAL
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 lg:mb-12 gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="hidden sm:flex w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] items-center justify-center text-[var(--os-accent)] shrink-0">
+                <Shield className="w-4 h-4" />
               </div>
-              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[var(--os-text)]">
-                Skills &amp; Inventory Loadout
-              </h2>
-              <DoodleUnderline className="w-40 h-2.5 text-[var(--os-accent)] mt-1" />
+              <div>
+                <div className="font-mono text-[var(--os-accent)] mono-caption-fluid">
+                  02 // CHARACTER ARSENAL
+                </div>
+                <h2 className="font-heading font-bold text-[var(--os-text)] section-heading-fluid">
+                  Skills &amp; Inventory Loadout
+                </h2>
+                <DoodleUnderline className="w-40 h-2.5 text-[var(--os-accent)] mt-1" />
+              </div>
             </div>
           </div>
 
-          <div className="text-xs font-mono text-[var(--os-text-dim)]">
-            <span>NO FAKE PERCENTAGES · REAL COMBAT PROFICIENCY</span>
+          <div className="font-mono text-[var(--os-text-dim)] mono-caption-fluid">
+            NO FAKE PERCENTAGES · REAL COMBAT PROFICIENCY
           </div>
         </div>
 
-        {/* Tier Switcher Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-8 no-scrollbar">
+        {/* Tier Switcher Tabs — single horizontal-scroll row, no scrollbar track */}
+        <div
+          className="flex flex-row gap-2 mb-8"
+          style={{
+            overflowX: "auto",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            WebkitOverflowScrolling: "touch",
+            scrollSnapType: "x mandatory",
+            paddingBottom: "2px",
+          }}
+        >
           {RESUME_DATA.skillTiers.map((tierData: SkillTier, idx: number) => {
             const isSelected = activeTierIndex === idx;
+            const shortLabel = TIER_SHORT_LABELS[tierData.tier] || tierData.tier;
             return (
               <button
                 key={tierData.tier}
                 onClick={() => setActiveTierIndex(idx)}
-                className={`touch-target px-4 py-2 rounded-xl text-xs sm:text-sm font-mono whitespace-nowrap border transition-all ${
+                style={{
+                  flex: "none",
+                  whiteSpace: "nowrap",
+                  scrollSnapAlign: "start",
+                  minHeight: "44px",
+                  paddingLeft: "1.25rem",
+                  paddingRight: "1.25rem",
+                }}
+                className={`rounded-xl text-sm font-mono border transition-all ${
                   isSelected
                     ? "bg-[var(--os-accent)] text-[#0B0B12] font-bold border-[var(--os-accent)] shadow-md shadow-[var(--os-accent)]/20"
                     : "bg-[var(--os-surface)] text-[var(--os-text-muted)] border-[var(--os-border)] hover:border-[var(--os-border-bright)] hover:text-white"
                 }`}
               >
-                <span>{tierData.tier}</span>
+                {shortLabel}
               </button>
             );
           })}
@@ -110,7 +141,7 @@ export function SkillsSection() {
         {(() => {
           const currentTier = RESUME_DATA.skillTiers[activeTierIndex];
           return (
-            <div className="rounded-2xl border border-[var(--os-border-bright)] bg-[var(--os-surface)] p-6 sm:p-8 mb-12 shadow-xl">
+            <div className="rounded-2xl border border-[var(--os-border-bright)] bg-[var(--os-surface)] p-6 sm:p-8 lg:p-10 mb-12 shadow-xl">
               {/* Header info */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-[var(--os-border)] gap-2">
                 <div>
@@ -133,8 +164,7 @@ export function SkillsSection() {
                     key={skill.name}
                     skill={skill}
                     flavorJoke={SKILL_JOKES[skill.name] || "Engineered with precision and tested against edge cases."}
-                    experienceTier={activeTierIndex === 0 ? "Main" : activeTierIndex === 1 ? "Comfortable" : "Learning"}
-                    rarity={activeTierIndex === 0 ? "Legendary" : activeTierIndex === 1 ? "Rare" : "Battle-Tested"}
+                    experienceTier={tierLabel(activeTierIndex) as "Main" | "Comfortable" | "Learning"}
                   />
                 ))}
               </div>
@@ -144,8 +174,8 @@ export function SkillsSection() {
 
         {/* Passive Buffs Section */}
         <div>
-          <div className="flex items-center gap-2 mb-4">
-            <Layers className="w-4 h-4 text-[var(--os-secondary)]" />
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
+            <Layers className="w-4 h-4 text-[var(--os-secondary)] shrink-0" />
             <h3 className="text-lg font-heading font-bold text-[var(--os-text)]">
               Soft Skills &amp; Passive Buffs
             </h3>

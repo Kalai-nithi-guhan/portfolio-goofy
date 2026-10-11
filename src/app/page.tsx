@@ -37,7 +37,7 @@ export default function Home() {
       <HeroSection />
 
       {/* Task 6: Data-driven Now Playing Card */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 mb-10 relative z-20">
+      <div className="os-container -mt-6 sm:-mt-8 mb-10 relative z-20">
         <NowPlayingCard />
       </div>
 

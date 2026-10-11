@@ -38,6 +38,15 @@ export function BugsyMascot({
   const [speechText, setSpeechText] = useState(DEV_JOKES[0]);
   const [isHovered, setIsHovered] = useState(false);
   const [idleTime, setIdleTime] = useState(0);
+  const [isTouch, setIsTouch] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: none)");
+    setIsTouch(mq.matches);
+    const listener = (e: MediaQueryListEvent) => setIsTouch(e.matches);
+    mq.addEventListener("change", listener);
+    return () => mq.removeEventListener("change", listener);
+  }, []);
 
   // Determine effective mood
   const currentMood = isDancing
@@ -147,33 +156,7 @@ export function BugsyMascot({
         }
       }}
     >
-      {/* Comic speech bubble with jokes or Zzz */}
-      {showSpeech && (
-        <AnimatePresence mode="wait">
-          <m.div
-            key={currentMood === "sleeping" ? "sleep-bubble" : speechText}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className={`absolute -top-14 z-20 px-3 py-1.5 text-xs font-mono rounded-xl border shadow-xl whitespace-nowrap pointer-events-none max-w-[240px] text-center ${
-              currentMood === "sleeping"
-                ? "bg-[#1E1B4B] text-[#A5B4FC] border-[#6366F1]/50 animate-pulse"
-                : "bg-[var(--os-surface)] text-[var(--os-accent)] border-[var(--os-border-bright)]"
-            }`}
-          >
-            {currentMood === "sleeping" ? (
-              <span className="font-bold">💤 Zzz... dreaming of clean PRs...</span>
-            ) : currentMood === "flexing" ? (
-              <span>💪 0 errors, 100% test coverage!</span>
-            ) : currentMood === "confused" ? (
-              <span>❓ Wait... where did my pointers go?</span>
-            ) : (
-              <span className="truncate">{speechText}</span>
-            )}
-            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-[var(--os-surface)] border-r border-b border-[var(--os-border)]" />
-          </m.div>
-        </AnimatePresence>
-      )}
+
 
       {/* Mascot Graphic with Motion Animation */}
       <m.div
@@ -345,6 +328,39 @@ export function BugsyMascot({
         <span className={`w-1.5 h-1.5 rounded-full ${currentMood === "sleeping" ? "bg-[#6366F1]" : "bg-[var(--os-accent)]"} animate-pulse`} />
         <span>BUGSY.SYS · {currentMood.toUpperCase()}</span>
       </div>
+
+      {/* Comic speech bubble with jokes or Zzz - shown UNDER Bugsy */}
+      {showSpeech && (
+        <AnimatePresence mode="wait">
+          <m.div
+            key={currentMood === "sleeping" ? "sleep-bubble" : speechText}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className={`mt-2 z-20 px-3.5 py-2 text-xs font-mono rounded-xl border shadow-xl text-center text-balance max-w-[260px] sm:max-w-[280px] relative pointer-events-none ${
+              currentMood === "sleeping"
+                ? "bg-[#1E1B4B] text-[#A5B4FC] border-[#6366F1]/50 animate-pulse"
+                : "bg-[var(--os-surface)] text-[var(--os-accent)] border-[var(--os-border-bright)]"
+            }`}
+          >
+            <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-[var(--os-surface)] border-l border-t border-[var(--os-border-bright)]" />
+            <p className="line-clamp-3 leading-snug text-balance">
+              {currentMood === "sleeping"
+                ? "💤 Zzz... dreaming of clean PRs..."
+                : currentMood === "flexing"
+                ? "💪 0 errors, 100% test coverage!"
+                : currentMood === "confused"
+                ? "❓ Wait... where did my pointers go?"
+                : speechText}
+            </p>
+          </m.div>
+        </AnimatePresence>
+      )}
+
+      {/* Caption under Bugsy */}
+      <p className="text-[11px] font-mono text-[var(--os-text-dim)] text-center mt-2 max-w-[200px]">
+        {isTouch ? "Tap me to chat" : "Hover me or click to chat"}
+      </p>
     </div>
   );
 }

@@ -10,7 +10,7 @@ export function CaseFilesSection() {
   const caseProjects = RESUME_DATA.projects.slice(0, 3);
 
   return (
-    <section id="case-files" className="py-16 sm:py-24 scroll-mt-14 relative overflow-hidden">
+    <section id="case-files" className="py-16 md:py-24 lg:py-32 scroll-mt-[72px] relative overflow-hidden">
       {/* Section ID Card Strip */}
       <SectionIdCard
         theme="casefiles"
@@ -18,25 +18,25 @@ export function CaseFilesSection() {
         sectionName="Case Files"
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
+      <div className="os-container relative">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 lg:mb-12 gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] flex items-center justify-center text-[#F59E0B]">
               <FolderSearch className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xs font-mono text-[#F59E0B] tracking-wider">
+              <div className="font-mono text-[#F59E0B] mono-caption-fluid">
                 DOSSIER ARCHIVE // EVIDENCE BOARD
               </div>
-              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[var(--os-text)]">
+              <h2 className="font-heading font-bold text-[var(--os-text)] section-heading-fluid">
                 Classified Case Files
               </h2>
               <DoodleUnderline className="w-40 h-2.5 text-[#F59E0B] mt-1" />
             </div>
           </div>
 
-          <div className="text-xs font-mono text-[var(--os-text-dim)]">
+          <div className="font-mono text-[var(--os-text-dim)] mono-caption-fluid">
             CONFIDENTIAL NEURAL INVESTIGATIONS · EVIDENCE LINKED
           </div>
         </div>
@@ -53,13 +53,18 @@ export function CaseFilesSection() {
           />
 
           {/* Yellow Caution Evidence Tape */}
-          <div className="absolute -top-3 -right-10 bg-[#EAB308] text-black font-mono font-black text-[10px] px-14 py-1 rotate-12 uppercase tracking-widest shadow-md border-y border-black/40 select-none pointer-events-none z-20">
+          <div
+            data-intentional-overflow="true"
+            className="absolute -top-3 -right-10 bg-[#EAB308] text-black font-mono font-black text-[10px] px-14 py-1 rotate-12 uppercase tracking-widest shadow-md border-y border-black/40 select-none pointer-events-none z-20"
+          >
             CONFIDENTIAL // DO NOT LEAK
           </div>
 
-          {/* Static Red SVG String Connections (Connecting Pinned Evidence) */}
+          {/* Scalable Red SVG String Connections (Connecting Pinned Evidence) */}
           <svg
             className="absolute inset-0 w-full h-full pointer-events-none z-10 hidden lg:block"
+            viewBox="0 0 1200 400"
+            preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
@@ -71,7 +76,7 @@ export function CaseFilesSection() {
             </defs>
             {/* String 1 to 2 */}
             <path
-              d="M 180 60 Q 340 110 500 60"
+              d="M 200 45 Q 400 110 600 45"
               fill="none"
               stroke="#EF4444"
               strokeWidth="2.5"
@@ -80,7 +85,7 @@ export function CaseFilesSection() {
             />
             {/* String 2 to 3 */}
             <path
-              d="M 500 60 Q 660 120 820 60"
+              d="M 600 45 Q 800 115 1000 45"
               fill="none"
               stroke="#EF4444"
               strokeWidth="2.5"
@@ -89,7 +94,7 @@ export function CaseFilesSection() {
             />
             {/* Diagonal cross connection from 1 to 3 */}
             <path
-              d="M 180 60 Q 500 150 820 60"
+              d="M 200 45 Q 600 160 1000 45"
               fill="none"
               stroke="#DC2626"
               strokeWidth="1.8"
@@ -183,10 +188,10 @@ export function CaseFilesSection() {
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[var(--os-accent)] hover:underline"
+                      className="touch-target inline-flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-[var(--os-accent)] hover:underline min-h-[44px]"
                     >
                       <span>Inspect Code</span>
-                      <ExternalLink className="w-3 h-3" />
+                      <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </div>
                 </div>

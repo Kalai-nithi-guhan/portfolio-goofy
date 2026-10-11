@@ -16,16 +16,16 @@ export function AboutSection() {
   const interestIcons = [Cpu, Eye, MessageSquare];
 
   return (
-    <section id="about" className="py-16 sm:py-20 scroll-mt-14 relative">
+    <section id="about" className="py-16 md:py-24 lg:py-32 scroll-mt-[72px] relative">
       <SectionIdCard
         theme="about"
         roleTitle="Chief Vibes Officer"
         sectionName="About"
       />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="os-container">
         {/* Section Header */}
-        <div className="flex items-start gap-4 mb-8">
+        <div className="flex items-start gap-4 mb-8 lg:mb-12">
           <div className="shrink-0">
             <IdBadge
               name={RESUME_DATA.name}
@@ -36,14 +36,16 @@ export function AboutSection() {
               size="sm"
             />
           </div>
-          <div className="pt-2">
+          <div className="pt-2 min-w-0">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] flex items-center justify-center text-[var(--os-accent)]">
+              <div className="hidden sm:flex w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] items-center justify-center text-[var(--os-accent)] shrink-0">
                 <FileText className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-xs font-mono text-[var(--os-accent)] tracking-wider">01 // SYSTEM OVERVIEW</div>
-                <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[var(--os-text)]">
+                <div className="font-mono text-[var(--os-accent)] mono-caption-fluid">
+                  01 // SYSTEM OVERVIEW
+                </div>
+                <h2 className="font-heading font-bold text-[var(--os-text)] section-heading-fluid">
                   About the Developer
                 </h2>
                 <DoodleUnderline className="w-36 h-2.5 text-[var(--os-accent)] mt-1" />

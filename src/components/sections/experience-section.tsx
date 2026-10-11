@@ -10,31 +10,31 @@ export function ExperienceSection() {
   const exp = RESUME_DATA.experience;
 
   return (
-    <section id="experience" className="py-16 sm:py-20 scroll-mt-14 relative">
+    <section id="experience" className="py-16 md:py-24 lg:py-32 scroll-mt-[72px] relative">
       <SectionIdCard
         theme="experience"
         roleTitle="Commit Historian"
         sectionName="Experience"
       />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="os-container">
         {/* Section Header */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] flex items-center justify-center text-[var(--os-accent)]">
+        <div className="flex items-center gap-3 mb-8 lg:mb-12">
+          <div className="hidden sm:flex w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] items-center justify-center text-[var(--os-accent)] shrink-0">
             <GitBranch className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-xs font-mono text-[var(--os-accent)] tracking-wider">
+            <div className="font-mono text-[var(--os-accent)] mono-caption-fluid">
               04 // VERSION CONTROL HISTORY
             </div>
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[var(--os-text)]">
+            <h2 className="font-heading font-bold text-[var(--os-text)] section-heading-fluid">
               Work Experience (Git Graph)
             </h2>
           </div>
         </div>
 
         {/* Company Header Box */}
-        <div className="rounded-2xl border border-[var(--os-border-bright)] bg-[var(--os-surface)] p-6 mb-8 shadow-xl">
+        <div className="rounded-2xl border border-[var(--os-border-bright)] bg-[var(--os-surface)] p-6 lg:p-8 mb-8 shadow-xl">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-[var(--os-border)]">
             <div>
               <div className="text-xs font-mono text-[var(--os-accent)] font-semibold mb-1">
@@ -85,14 +85,18 @@ export function ExperienceSection() {
                   {/* Commit Node Circle */}
                   <button
                     onClick={() => setSelectedCommit(commit.hash)}
-                    className={`absolute -left-[23px] sm:-left-[27px] top-1 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected
-                        ? "border-[var(--os-accent)] bg-[var(--os-accent)] text-black scale-110 shadow-lg shadow-[var(--os-accent)]/30"
-                        : "border-[var(--os-border-bright)] bg-[#0C0D1A] text-[var(--os-text-dim)] group-hover:border-[var(--os-accent)] group-hover:text-[var(--os-accent)]"
-                    }`}
+                    className="touch-target absolute -left-[33px] sm:-left-[37px] -top-2 w-11 h-11 flex items-center justify-center"
                     aria-label={`Inspect commit ${commit.hash}`}
                   >
-                    <GitCommitIcon className="w-3 h-3" />
+                    <div
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                        isSelected
+                          ? "border-[var(--os-accent)] bg-[var(--os-accent)] text-black scale-110 shadow-lg shadow-[var(--os-accent)]/30"
+                          : "border-[var(--os-border-bright)] bg-[#0C0D1A] text-[var(--os-text-dim)] group-hover:border-[var(--os-accent)] group-hover:text-[var(--os-accent)]"
+                      }`}
+                    >
+                      <GitCommitIcon className="w-3 h-3" />
+                    </div>
                   </button>
 
                   {/* Commit Card */}

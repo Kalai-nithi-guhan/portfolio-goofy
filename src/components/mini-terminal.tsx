@@ -30,14 +30,18 @@ export function MiniTerminal() {
 
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Only auto-scroll after user-triggered commands, never on mount
+  const userCommandRef = useRef(false);
 
   useEffect(() => {
+    if (!userCommandRef.current) return;
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [history]);
 
   const handleRunCommand = (cmd: string) => {
     const trimmed = cmd.trim();
     if (!trimmed) return;
+    userCommandRef.current = true;
 
     const lower = trimmed.toLowerCase();
     let result: React.ReactNode = null;
@@ -153,7 +157,7 @@ export function MiniTerminal() {
   };
 
   return (
-    <section id="terminal" className="py-16 sm:py-24 scroll-mt-14 relative">
+    <section id="terminal" className="py-16 md:py-24 lg:py-32 scroll-mt-[72px] relative">
       {/* Section ID Card Strip */}
       <SectionIdCard
         theme="terminal"
@@ -161,18 +165,18 @@ export function MiniTerminal() {
         sectionName="Terminal"
       />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="os-container">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 lg:mb-12 gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] flex items-center justify-center text-[var(--os-accent)]">
               <TerminalIcon className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xs font-mono text-[var(--os-accent)] tracking-wider">
+              <div className="font-mono text-[var(--os-accent)] mono-caption-fluid">
                 06 // INTERACTIVE CONSOLE
               </div>
-              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[var(--os-text)]">
+              <h2 className="font-heading font-bold text-[var(--os-text)] section-heading-fluid">
                 Mini Terminal Shell
               </h2>
               <DoodleUnderline className="w-36 h-2.5 text-[var(--os-accent)] mt-1" />
@@ -180,13 +184,13 @@ export function MiniTerminal() {
           </div>
 
           {/* Quick command buttons */}
-          <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
-            <span className="text-[10px] text-[var(--os-text-dim)] mr-1">TRY:</span>
+          <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs sm:text-sm">
+            <span className="text-[10px] sm:text-xs text-[var(--os-text-dim)] mr-1">TRY:</span>
             {["whoami", "skills", "projects", "contact", "sudo hire kalai"].map((cmd) => (
               <button
                 key={cmd}
                 onClick={() => handleRunCommand(cmd)}
-                className="px-2.5 py-1 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] hover:border-[var(--os-accent)] text-[var(--os-text-muted)] hover:text-white transition-colors"
+                className="touch-target px-3 py-2 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] hover:border-[var(--os-accent)] text-[var(--os-text-muted)] hover:text-white transition-colors min-h-[44px]"
               >
                 {cmd}
               </button>
@@ -194,10 +198,10 @@ export function MiniTerminal() {
           </div>
         </div>
 
-        {/* Terminal Window */}
+        {/* Terminal Window: 100% width up to 900px, font 14-15px */}
         <div
           onClick={() => inputRef.current?.focus()}
-          className="rounded-2xl border border-[var(--os-border-bright)] bg-[#0C0D17] shadow-2xl overflow-hidden font-mono cursor-text"
+          className="w-full max-w-[900px] mx-auto rounded-2xl border border-[var(--os-border-bright)] bg-[#0C0D17] shadow-2xl overflow-hidden font-mono cursor-text"
         >
           {/* Title bar */}
           <div className="flex items-center justify-between px-4 py-3 bg-[#131422] border-b border-[var(--os-border)] select-none">
@@ -205,15 +209,15 @@ export function MiniTerminal() {
               <span className="w-3 h-3 rounded-full bg-[#FF5F56]" />
               <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
               <span className="w-3 h-3 rounded-full bg-[#27C93F]" />
-              <span className="ml-2 text-xs text-[var(--os-text-muted)]">
+              <span className="ml-2 text-xs sm:text-sm text-[var(--os-text-muted)]">
                 kalai@kalaios: ~ (zsh)
               </span>
             </div>
-            <div className="text-[10px] text-[var(--os-text-dim)]">UTF-8 · Interactive</div>
+            <div className="text-[10px] sm:text-xs text-[var(--os-text-dim)]">UTF-8 · Interactive</div>
           </div>
 
-          {/* Console output body */}
-          <div className="p-4 sm:p-6 space-y-3 min-h-[260px] max-h-[380px] overflow-y-auto text-xs">
+          {/* Console output body: font 14-15px on md+ */}
+          <div className="p-4 sm:p-6 space-y-3 min-h-[260px] md:min-h-[300px] max-h-[420px] overflow-y-auto text-xs sm:text-sm md:text-[15px]">
             {history.map((entry, idx) => (
               <div key={idx} className="space-y-1">
                 <div className="flex items-center gap-2 text-[var(--os-accent)]">
@@ -231,9 +235,9 @@ export function MiniTerminal() {
           {/* Prompt input row */}
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 px-4 py-3 bg-[#0A0B14] border-t border-[var(--os-border)]"
+            className="flex items-center gap-2 px-4 py-3 bg-[#0A0B14] border-t border-[var(--os-border)] text-xs sm:text-sm md:text-[15px]"
           >
-            <span className="text-[var(--os-accent)] text-xs shrink-0">
+            <span className="text-[var(--os-accent)] shrink-0">
               kalai@kalaios:~$
             </span>
             <input
@@ -242,7 +246,7 @@ export function MiniTerminal() {
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               placeholder="type a command (e.g. whoami, sudo hire kalai)..."
-              className="w-full bg-transparent text-xs text-white placeholder-[var(--os-text-dim)] outline-none"
+              className="w-full bg-transparent text-white placeholder-[var(--os-text-dim)] outline-none"
               autoCapitalize="none"
               autoComplete="off"
               spellCheck="false"

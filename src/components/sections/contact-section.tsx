@@ -92,7 +92,7 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-16 sm:py-24 scroll-mt-14 relative">
+    <section id="contact" className="py-16 md:py-24 lg:py-32 scroll-mt-[72px] relative">
       {/* Toast Notification */}
       <AnimatePresence>
         {toastMessage && (
@@ -115,26 +115,26 @@ export function ContactSection() {
         sectionName="Contact"
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="os-container">
         {/* Section Header */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] flex items-center justify-center text-[var(--os-accent)]">
+        <div className="flex items-center gap-3 mb-8 lg:mb-12">
+          <div className="hidden sm:flex w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] items-center justify-center text-[var(--os-accent)] shrink-0">
             <Mail className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-xs font-mono text-[var(--os-accent)] tracking-wider">
+            <div className="font-mono text-[var(--os-accent)] mono-caption-fluid">
               07 // COMPILE &amp; SEND
             </div>
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[var(--os-text)]">
+            <h2 className="font-heading font-bold text-[var(--os-text)] section-heading-fluid">
               Initiate Transmission
             </h2>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           {/* Left Column: Copy-on-Click Quick Chips */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="p-6 rounded-2xl border border-[var(--os-border-bright)] bg-[var(--os-surface)] shadow-xl">
+            <div className="p-6 lg:p-8 rounded-2xl border border-[var(--os-border-bright)] bg-[var(--os-surface)] shadow-xl">
               <h3 className="text-lg font-heading font-bold text-[var(--os-text)] mb-2">
                 Direct Comms
               </h3>

@@ -12,7 +12,6 @@ interface HoloSkillCardProps {
   skill: SkillItem;
   flavorJoke: string;
   experienceTier?: ExperienceTierLabel;
-  rarity?: "Legendary" | "Mythic" | "Rare" | "Battle-Tested";
 }
 
 const CATEGORY_ART_MAP: Record<string, string> = {
@@ -47,7 +46,6 @@ export function HoloSkillCard({
   skill,
   flavorJoke,
   experienceTier = "Main",
-  rarity = "Battle-Tested",
 }: HoloSkillCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [imgError, setImgError] = useState(false);
@@ -81,13 +79,13 @@ export function HoloSkillCard({
   };
 
   const handleMouseEnter = () => {
-    if (!isTouchRef.current) {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       setIsFlipped(true);
     }
   };
 
   const handleMouseLeave = () => {
-    if (!isTouchRef.current) {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       setIsFlipped(false);
     }
   };
@@ -105,7 +103,7 @@ export function HoloSkillCard({
       onBlur={() => setIsFlipped(false)}
       onKeyDown={handleKeyDown}
       onMouseMove={handleMouseMove}
-      className="relative h-80 w-full rounded-2xl cursor-pointer select-none group outline-none focus-visible:ring-2 focus-visible:ring-[var(--os-accent)]"
+      className="relative min-w-[220px] h-[340px] sm:h-[350px] w-full rounded-2xl cursor-pointer select-none group outline-none focus-visible:ring-2 focus-visible:ring-[var(--os-accent)]"
       style={{ perspective: "1000px" }}
     >
       {/* Inner card with 3D transform */}
@@ -125,19 +123,25 @@ export function HoloSkillCard({
         >
           {/* Holographic dynamic gradient overlay */}
           <div
-            className="absolute inset-0 pointer-events-none z-10 opacity-0 group-hover:opacity-40 transition-opacity duration-300"
+            className="absolute inset-0 pointer-events-none z-10 opacity-0 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-40 transition-opacity duration-300"
             style={{
               background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(124, 255, 107, 0.35) 0%, rgba(255, 92, 170, 0.25) 40%, transparent 70%)`,
             }}
           />
 
-          {/* Card Top: Level + Category */}
+          {/* Card Top: Tier + Category */}
           <div className="flex items-center justify-between pb-2 border-b border-[var(--os-border)] relative z-20">
-            <div className="flex items-center gap-1.5 font-mono text-[11px]">
-              <span className="text-[#FFE600] font-bold">LV 99</span>
-              <span className="text-[var(--os-text-dim)]">·</span>
-              <span className="text-[var(--os-accent)] font-semibold">{rarity}</span>
-            </div>
+            <span
+              className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                experienceTier === "Main"
+                  ? "bg-[var(--os-accent)]/20 text-[var(--os-accent)] border-[var(--os-accent)]/40"
+                  : experienceTier === "Comfortable"
+                  ? "bg-[#38BDF8]/20 text-[#38BDF8] border-[#38BDF8]/40"
+                  : "bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40"
+              }`}
+            >
+              {experienceTier}
+            </span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[var(--os-surface)] border border-[var(--os-border)] text-[var(--os-text-dim)]">
               {skill.category}
             </span>
@@ -213,27 +217,12 @@ export function HoloSkillCard({
             )}
           </div>
 
-          {/* Flavor Text & Experience Tier Label (No percentages!) */}
+          {/* Flavor Text & Experience Tier Label (No fake numbers!) */}
           <div className="space-y-2 text-left">
             <div className="p-2 rounded-lg bg-[var(--os-bg)] border border-[var(--os-border)]">
               <p className="text-[10.5px] font-mono text-[var(--os-text-muted)] leading-tight italic">
                 &ldquo;{flavorJoke}&rdquo;
               </p>
-            </div>
-
-            <div className="flex items-center justify-between px-2 py-1.5 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] font-mono text-xs">
-              <span className="text-[var(--os-text-dim)] text-[10px]">Experience Tier:</span>
-              <span
-                className={`text-[10.5px] font-bold px-2 py-0.5 rounded border ${
-                  experienceTier === "Main"
-                    ? "bg-[var(--os-accent)]/20 text-[var(--os-accent)] border-[var(--os-accent)]/40"
-                    : experienceTier === "Comfortable"
-                    ? "bg-[#38BDF8]/20 text-[#38BDF8] border-[#38BDF8]/40"
-                    : "bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40"
-                }`}
-              >
-                {experienceTier}
-              </span>
             </div>
           </div>
 

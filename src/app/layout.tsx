@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { spaceGrotesk, inter, jetbrainsMono } from "./fonts";
 import { MotionProvider } from "@/components/motion-provider";
+import { ScrollTopOnLoad } from "@/components/scroll-top-on-load";
 import { RESUME_DATA } from "@/data/resume";
 import "./globals.css";
 
@@ -102,6 +103,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-[var(--os-bg)] text-[var(--os-text)] selection:bg-[var(--os-accent)] selection:text-black">
+        <ScrollTopOnLoad />
         <MotionProvider>{children}</MotionProvider>
       </body>
     </html>

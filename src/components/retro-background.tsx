@@ -125,9 +125,9 @@ export function RetroBackground() {
       <div className="absolute inset-0 scanline-grid opacity-35" />
       {/* Top subtle radial glow */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] opacity-20 pointer-events-none"
+        className="absolute top-0 left-0 right-0 h-[350px] opacity-20 pointer-events-none overflow-hidden"
         style={{
-          background: "radial-gradient(circle, rgba(124, 255, 107, 0.15) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 100% at 50% 0%, rgba(124, 255, 107, 0.15) 0%, transparent 70%)",
         }}
       />
       {/* Lightweight canvas */}

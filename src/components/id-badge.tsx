@@ -66,7 +66,8 @@ export function IdBadge({
     const dx = e.clientX - dragStartX.current;
     velocityRef.current = e.clientX - lastXRef.current;
     lastXRef.current = e.clientX;
-    setAngle(dragStartAngle.current + dx * 0.3);
+    const nextAngle = dragStartAngle.current + dx * 0.3;
+    setAngle(Math.max(-20, Math.min(20, nextAngle)));
   };
 
   const handlePointerUp = () => {
@@ -77,6 +78,7 @@ export function IdBadge({
   const photoSize = isSmall ? "w-20 h-20" : "w-28 h-28";
   const photoWH = isSmall ? 80 : 112;
   const badgeW = isSmall ? "w-36" : "w-48";
+  const clampedAngle = Math.max(-20, Math.min(20, angle));
 
   return (
     <div className="flex flex-col items-center select-none" style={{ perspective: "400px" }}>
@@ -84,7 +86,7 @@ export function IdBadge({
       <div
         className="flex flex-col items-center"
         style={{
-          transform: `rotate(${angle}deg)`,
+          transform: `rotate(${clampedAngle}deg)`,
           transformOrigin: "50% 0%",
           willChange: "transform",
           cursor: isDragging ? "grabbing" : "grab",
@@ -126,7 +128,7 @@ export function IdBadge({
 
         {/* Badge card */}
         <div
-          className={`${badgeW} rounded-2xl border-2 border-[var(--os-border-bright)] bg-[#111222] shadow-2xl overflow-hidden relative`}
+          className={`${badgeW} h-auto rounded-2xl border-2 border-[var(--os-border-bright)] bg-[#111222] shadow-2xl overflow-hidden relative`}
         >
           {/* Top accent strip */}
           <div

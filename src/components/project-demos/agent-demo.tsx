@@ -47,11 +47,12 @@ export function AgentDemo() {
           </span>
           <button
             onClick={handleRestart}
-            className="p-1 text-[var(--os-text-muted)] hover:text-white rounded"
+            className="flex items-center justify-center rounded text-[var(--os-text-muted)] hover:text-white transition-colors"
+            style={{ minWidth: "44px", minHeight: "44px" }}
             title="Restart simulation"
             aria-label="Restart agent simulation"
           >
-            <RotateCcw className="w-3 h-3" />
+            <RotateCcw className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

@@ -13,17 +13,17 @@ export function OsFooter() {
 
   return (
     <footer className="border-t border-[var(--os-border)] bg-[var(--os-bg)]/80 py-8 mb-16 md:mb-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-[var(--os-text-dim)]">
+      <div className="os-container flex flex-col lg:flex-row items-center justify-between gap-4 font-mono text-xs text-[var(--os-text-dim)]">
         {/* Left: OS Info */}
-        <div className="flex items-center gap-2">
-          <Terminal className="w-4 h-4 text-[var(--os-accent)]" />
+        <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 text-center lg:text-left">
+          <Terminal className="w-4 h-4 text-[var(--os-accent)] shrink-0" />
           <span>KalaiOS 2.5.0-release</span>
           <span>·</span>
           <span>All rights reserved &copy; 2025</span>
         </div>
 
         {/* Center: Made with React, caffeine and mild panic */}
-        <div className="flex flex-col sm:items-center text-center gap-1">
+        <div className="flex flex-col items-center text-center gap-1">
           <div className="flex items-center gap-1.5 text-[var(--os-text-muted)] justify-center">
             <span>Engineered by</span>
             <span className="text-[var(--os-text)] font-semibold">{RESUME_DATA.name}</span>
@@ -35,12 +35,12 @@ export function OsFooter() {
         </div>
 
         {/* Right: Quick Links, Resume & Back-to-Top Rocket Button */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center justify-center lg:justify-end gap-1.5 sm:gap-2">
           <a
             href={RESUME_DATA.socials.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[var(--os-accent)] transition-colors p-1"
+            className="touch-target hover:text-[var(--os-accent)] transition-colors"
             aria-label="GitHub"
           >
             <GithubIcon className="w-4 h-4" />
@@ -49,7 +49,7 @@ export function OsFooter() {
             href={RESUME_DATA.socials.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#38BDF8] transition-colors p-1"
+            className="touch-target hover:text-[#38BDF8] transition-colors"
             aria-label="LinkedIn"
           >
             <LinkedinIcon className="w-4 h-4" />
@@ -58,7 +58,7 @@ export function OsFooter() {
             href={RESUME_DATA.socials.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[var(--os-secondary)] transition-colors p-1"
+            className="touch-target hover:text-[var(--os-secondary)] transition-colors"
             aria-label="Instagram"
           >
             <InstagramIcon className="w-4 h-4" />
@@ -67,7 +67,7 @@ export function OsFooter() {
             href={RESUME_DATA.socials.leetcode}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-[#FFA116] transition-colors p-1"
+            className="touch-target hover:text-[#FFA116] transition-colors"
             aria-label="LeetCode"
           >
             <Code2 className="w-4 h-4" />

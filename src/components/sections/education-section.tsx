@@ -5,24 +5,24 @@ import { GraduationCap, Award, CheckCircle2, Clock, Sparkles } from "lucide-reac
 
 export function EducationSection() {
   return (
-    <section id="education" className="py-16 sm:py-20 scroll-mt-14 relative">
+    <section id="education" className="py-16 md:py-24 lg:py-32 scroll-mt-[72px] relative">
       <SectionIdCard
         theme="education"
         roleTitle="Quest Scholar"
         sectionName="Education"
       />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="os-container">
         {/* Section Header */}
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-8 lg:mb-12">
           <div className="w-8 h-8 rounded-lg bg-[var(--os-surface)] border border-[var(--os-border)] flex items-center justify-center text-[var(--os-accent)]">
             <GraduationCap className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-xs font-mono text-[var(--os-accent)] tracking-wider">
+            <div className="font-mono text-[var(--os-accent)] mono-caption-fluid">
               05 // QUEST LOG CHRONICLES
             </div>
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[var(--os-text)]">
+            <h2 className="font-heading font-bold text-[var(--os-text)] section-heading-fluid">
               Education &amp; Certifications
             </h2>
             <DoodleUnderline className="w-44 h-2.5 text-[#38BDF8] mt-1" />
@@ -38,7 +38,7 @@ export function EducationSection() {
             return (
               <div
                 key={quest.id}
-                className={`p-5 sm:p-6 rounded-2xl border transition-all ${
+                className={`p-5 sm:p-6 lg:p-8 rounded-2xl border transition-all ${
                   isMainQuest
                     ? "border-[var(--os-accent)]/80 bg-[var(--os-surface)] shadow-lg"
                     : "border-[var(--os-border)] bg-[var(--os-surface)]/70 hover:border-[var(--os-border-bright)]"

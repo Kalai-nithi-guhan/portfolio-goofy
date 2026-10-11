@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { RESUME_DATA, Project } from "@/data/resume";
 import { AgentDemo } from "./project-demos/agent-demo";
 import { RagDemo } from "./project-demos/rag-demo";
@@ -17,9 +17,22 @@ import { ExternalLink, Gamepad2, ChevronRight, ChevronLeft } from "lucide-react"
 type FilterTag = "All" | "AI Agents" | "Computer Vision" | "NLP/RAG" | "ML";
 const FILTERS: FilterTag[] = ["All", "AI Agents", "Computer Vision", "NLP/RAG", "ML"];
 
+const SHORT_TITLES: Record<string, string> = {
+  "autonomous-ai-agent": "AI Agent",
+  "contextual-doc-qa-rag": "Doc QA RAG",
+  "exercise-counter-cv": "Exercise Counter",
+  "email-summarizer": "Email Summarizer",
+  "crop-disease-pest": "Crop Disease",
+  "traffic-violation-detection": "Traffic Violation",
+  "crime-rate-prediction": "Crime Rate",
+  "ai-fertilizer-recommender": "Fertilizer Recommender",
+};
+
 export function HandheldConsole() {
   const [activeFilter, setActiveFilter] = useState<FilterTag>("All");
   const [selectedIdx, setSelectedIdx] = useState(0);
+  const tabRowRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const allProjects = RESUME_DATA.projects;
 
   const projects = useMemo(() => {
@@ -33,21 +46,28 @@ export function HandheldConsole() {
     retroSound.playBlip(600, 0.06);
     setActiveFilter(f);
     setSelectedIdx(0);
+    tabRowRef.current?.scrollTo({ left: 0 });
   };
 
   const handleSelect = (idx: number) => {
     retroSound.playBlip(680, 0.08);
     setSelectedIdx(idx);
+    tabRefs.current[idx]?.scrollIntoView({ inline: "center", block: "nearest" });
   };
 
   const handleNext = () => {
     retroSound.playBlip(720, 0.06);
-    setSelectedIdx((prev) => (prev + 1) % projects.length);
+    const nextIdx = (Math.min(selectedIdx, projects.length - 1) + 1) % projects.length;
+    setSelectedIdx(nextIdx);
+    tabRefs.current[nextIdx]?.scrollIntoView({ inline: "center", block: "nearest" });
   };
 
   const handlePrev = () => {
     retroSound.playBlip(640, 0.06);
-    setSelectedIdx((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
+    const curr = Math.min(selectedIdx, projects.length - 1);
+    const prevIdx = curr === 0 ? projects.length - 1 : curr - 1;
+    setSelectedIdx(prevIdx);
+    tabRefs.current[prevIdx]?.scrollIntoView({ inline: "center", block: "nearest" });
   };
 
   const renderDemo = (type: Project["demoType"]) => {
@@ -91,43 +111,69 @@ export function HandheldConsole() {
       </div>
 
       {/* Handheld Console Outer Chassis */}
-      <div className="max-w-4xl mx-auto rounded-3xl border-4 border-[#23253B] bg-[#141525] p-5 sm:p-8 shadow-2xl relative overflow-hidden">
+      <div className="max-w-[960px] w-full mx-auto rounded-3xl border-4 border-[#23253B] bg-[#141525] p-5 sm:p-8 lg:p-10 shadow-2xl relative overflow-hidden">
         {/* Top Cartridge Slot */}
-        <div className="flex flex-col items-center mb-6">
-          <div className="w-56 sm:w-80 h-3 bg-[#090A12] rounded-t-lg border-x-2 border-t-2 border-[#23253B]" />
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar max-w-full">
+        <div className="flex items-center justify-center gap-1.5 mb-6 w-full">
+          {/* Mobile Prev Arrow Button (44x44) */}
+          <button
+            type="button"
+            onClick={handlePrev}
+            className="lg:hidden flex-none w-[44px] h-[44px] rounded-xl bg-[#23253B] text-[var(--os-text-muted)] hover:text-white flex items-center justify-center active:scale-95 transition-all shadow-md shrink-0"
+            aria-label="Previous Cartridge Tab"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          {/* Cartridge tabs container */}
+          <div
+            ref={tabRowRef}
+            className="flex items-center gap-2 overflow-x-auto snap-x snap-mandatory no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden px-2 pt-3 pb-2 max-w-full lg:flex-wrap lg:overflow-visible lg:justify-center"
+            style={{ scrollSnapType: "x mandatory" }}
+          >
             {projects.map((p, idx) => {
               const isInserted = Math.min(selectedIdx, projects.length - 1) === idx;
+              const shortLabel = `ROM ${String(idx + 1).padStart(2, "0")}: ${SHORT_TITLES[p.id] || p.title}`;
               return (
                 <button
                   key={p.id}
+                  ref={(el) => {
+                    tabRefs.current[idx] = el;
+                  }}
                   onClick={() => handleSelect(idx)}
-                  className={`touch-target transition-all duration-300 font-mono text-[11px] px-3.5 py-2 rounded-t-xl border-x-2 border-t-2 shrink-0 ${
+                  className={`touch-target transition-all duration-300 font-mono text-[11px] sm:text-xs px-3.5 py-2 rounded-t-xl border-x-2 border-t-2 shrink-0 flex-none whitespace-nowrap snap-center ${
                     isInserted
                       ? "bg-[var(--os-accent)] text-[#0B0B12] font-bold border-[var(--os-accent)] -translate-y-2 shadow-lg"
                       : "bg-[#0A0B14] text-[var(--os-text-muted)] border-[var(--os-border)] hover:border-[var(--os-accent)] hover:text-white"
                   }`}
                   aria-label={`Insert cartridge: ${p.title}`}
                 >
-                  <span className="mr-1.5 opacity-70">ROM {String(idx + 1).padStart(2, "0")}:</span>
-                  <span className="hidden sm:inline">{p.title}</span>
-                  <span className="sm:hidden">{p.badge}</span>
+                  {shortLabel}
                 </button>
               );
             })}
           </div>
+
+          {/* Mobile Next Arrow Button (44x44) */}
+          <button
+            type="button"
+            onClick={handleNext}
+            className="lg:hidden flex-none w-[44px] h-[44px] rounded-xl bg-[#23253B] text-[var(--os-text-muted)] hover:text-white flex items-center justify-center active:scale-95 transition-all shadow-md shrink-0"
+            aria-label="Next Cartridge Tab"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
 
         {/* LCD Screen */}
-        <div className="rounded-2xl border-4 border-[#080810] bg-[#07080F] p-4 sm:p-6 shadow-inner">
+        <div className="rounded-2xl border-4 border-[#080810] bg-[#07080F] p-4 sm:p-6 lg:p-8 shadow-inner">
           {/* Screen Top Status */}
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--os-border)] font-mono text-xs text-[var(--os-text-dim)]">
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--os-border)] font-mono text-xs sm:text-sm lg:text-base text-[var(--os-text-dim)]">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[var(--os-accent)] animate-pulse" />
               <span className="text-[var(--os-text)] font-bold">{current.title}</span>
             </div>
             <span
-              className="text-[10px] font-bold uppercase px-2 py-0.5 rounded"
+              className="text-[10px] sm:text-xs font-bold uppercase px-2.5 py-0.5 rounded"
               style={{
                 backgroundColor: `${current.color}20`,
                 color: current.color,
@@ -141,15 +187,15 @@ export function HandheldConsole() {
           <div className="mb-6">{renderDemo(current.demoType)}</div>
 
           {/* Project Details */}
-          <div className="p-4 rounded-xl bg-[var(--os-surface)] border border-[var(--os-border)] space-y-4">
+          <div className="p-4 sm:p-5 lg:p-6 rounded-xl bg-[var(--os-surface)] border border-[var(--os-border)] space-y-4">
             <div>
-              <h4 className="text-sm sm:text-base font-bold text-[var(--os-text)] mb-1">{current.tagline}</h4>
-              <p className="text-xs text-[var(--os-text-muted)] leading-relaxed">{current.description}</p>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold text-[var(--os-text)] mb-1.5">{current.tagline}</h4>
+              <p className="text-xs sm:text-sm lg:text-[15px] text-[var(--os-text-muted)] leading-relaxed">{current.description}</p>
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {current.highlights.map((h, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs text-[var(--os-text-muted)]">
+                <div key={i} className="flex items-start gap-2 text-xs sm:text-sm text-[var(--os-text-muted)]">
                   <span className="text-[var(--os-accent)]">✦</span>
                   <span>{h}</span>
                 </div>
@@ -161,7 +207,7 @@ export function HandheldConsole() {
               {current.tech.map((t) => (
                 <span
                   key={t}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono bg-[var(--os-bg)] border border-[var(--os-border)] text-[var(--os-text-dim)]"
+                  className="px-2.5 py-1 rounded text-[11px] sm:text-xs font-mono bg-[var(--os-bg)] border border-[var(--os-border)] text-[var(--os-text-dim)]"
                 >
                   {t}
                 </span>

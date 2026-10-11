@@ -20,7 +20,7 @@ export function CursorTrail() {
   useEffect(() => {
     // Only on desktop with fine mouse pointer
     if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(pointer: fine)");
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
     isFinePointer.current = mq.matches;
 
     if (!mq.matches) return;
