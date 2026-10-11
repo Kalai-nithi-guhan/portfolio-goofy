@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- Glow filter -->
+  <defs>
+    <linearGradient id="bugsyGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7CFF6B" />
+      <stop offset="1" stop-color="#38BDF8" />
+    </linearGradient>
+    <linearGradient id="bodyGrad" x1="12" y1="12" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E1E2E" />
+      <stop offset="1" stop-color="#0F0F1A" />
+    </linearGradient>
+  </defs>
+
+  <!-- Antennae -->
+  <path d="M22 18 C18 10 12 12 10 14" stroke="#7CFF6B" stroke-width="2.5" stroke-linecap="round" />
+  <circle cx="10" cy="14" r="2.5" fill="#7CFF6B" />
+
+  <path d="M42 18 C46 10 52 12 54 14" stroke="#7CFF6B" stroke-width="2.5" stroke-linecap="round" />
+  <circle cx="54" cy="14" r="2.5" fill="#FF5CAA" />
+
+  <!-- Legs -->
+  <path d="M12 30 C6 30 6 34 4 36" stroke="#7CFF6B" stroke-width="2" stroke-linecap="round" />
+  <path d="M12 40 C6 42 6 46 4 48" stroke="#7CFF6B" stroke-width="2" stroke-linecap="round" />
+  <path d="M52 30 C58 30 58 34 60 36" stroke="#7CFF6B" stroke-width="2" stroke-linecap="round" />
+  <path d="M52 40 C58 42 58 46 60 48" stroke="#7CFF6B" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Body Chassis -->
+  <rect x="14" y="16" width="36" height="36" rx="14" fill="url(#bodyGrad)" stroke="#7CFF6B" stroke-width="2.5" />
+
+  <!-- Screen Visor -->
+  <rect x="18" y="22" width="28" height="16" rx="6" fill="#0A0A12" stroke="#2A2A42" stroke-width="1.5" />
+
+  <!-- Eyes with green glow -->
+  <circle cx="26" cy="30" r="4" fill="#7CFF6B" />
+  <circle cx="38" cy="30" r="4" fill="#7CFF6B" />
+  <circle cx="27" cy="29" r="1.5" fill="#FFFFFF" />
+  <circle cx="39" cy="29" r="1.5" fill="#FFFFFF" />
+
+  <!-- Debug Smile / Circuit line -->
+  <path d="M25 43 Q32 47 39 43" stroke="#FF5CAA" stroke-width="2" stroke-linecap="round" fill="none" />
+</svg>
